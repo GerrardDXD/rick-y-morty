@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Usuario from "./components/usuario/usuario";
 import "./App.css";
 import { listaDeUsuarios } from "./components/usuario/listaUsers.service";
-
+import Personajes from "./components/Personajes/personaje";
 // function suma (numero) {
 //   return numero + 1
 // }
@@ -61,8 +61,23 @@ import { listaDeUsuarios } from "./components/usuario/listaUsers.service";
 // }
 
 // export default App
-
+const objeto = {
+  nombre: "gerrard",
+  edad: 15,
+  grupo: { persona1: "gerrard", persona2: "dariem", persona3: "mi tio" },
+};
+objeto.grupo.persona1;
 function App() {
+  const [characters, setCharacters] = useState(null);
+
+  useEffect(() => {
+    const personajes = fetch("https://rickandmortyapi.com/api/character")
+      .then((reponse) => reponse.json())
+      .then((reponse) => {
+        console.log(reponse);
+        setCharacters(reponse.results);
+      });
+  }, []);
   return (
     <div className="app">
       <nav className="barra">
@@ -84,7 +99,12 @@ function App() {
           <div>Clear Filters</div>
           <div>Box</div>
         </div>
-        <div className="Cards">Cards</div>
+        <div className="Cards">
+          {characters &&
+            characters.map((elemento, indice) => {
+              return <Personajes propiedades={characters && elemento} />;
+            })}
+        </div>
       </div>
     </div>
   );
