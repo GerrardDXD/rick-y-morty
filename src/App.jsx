@@ -3,6 +3,65 @@ import Usuario from "./components/usuario/usuario";
 import "./App.css";
 import { listaDeUsuarios } from "./components/usuario/listaUsers.service";
 import Personajes from "./components/Personajes/personaje";
+import Species from "./components/Filtro/Species";
+import Gender from "./components/Filtro/Gender";
+import Status from "./components/Filtro/Status";
+
+function App() {
+  const [characters, setCharacters] = useState(null);
+
+  useEffect(() => {
+    const personajes = fetch("https://rickandmortyapi.com/api/character")
+      .then((reponse) => reponse.json())
+      .then((reponse) => {
+        console.log(reponse);
+        setCharacters(reponse.results);
+      });
+  }, []);
+  const Filtro = async () => {
+    const temporal = await fetch(
+      "https://rickandmortyapi.com/api/character/?name=rick&status=alive"
+    );
+    const data = await temporal.json();
+    setCharacters(data.results);
+  };
+  return (
+    <div className="app">
+      <nav className="barra">
+        <h1 className="primero">Rick & Morty Wiki</h1>
+        <div className="Links">
+          <h2>Characters</h2>
+          <h2>Episode</h2>
+          <h2>Location</h2>
+        </div>
+      </nav>
+      <h1 className="Characters">Characters</h1>
+      <div className="Buscador">
+        <input type="text" placeholder="Buscar" className="Input" />
+        <button className="Boton">Buscar</button>
+      </div>
+      <div className="Contenedor">
+        <div className="Filter">
+          <Status status={Filtro} />
+          <Species />
+          <Gender />
+        </div>
+        <div className="Cards">
+          {characters &&
+            characters.map((elemento, indice) => {
+              return <Personajes propiedades={characters && elemento} />;
+            })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+// const objeto = {
+//   nombre: "gerrard",
+//   edad: 15,
+//   grupo: { persona1: "gerrard", persona2: "dariem", persona3: "mi tio" },
 // function suma (numero) {
 //   return numero + 1
 // }
@@ -61,53 +120,3 @@ import Personajes from "./components/Personajes/personaje";
 // }
 
 // export default App
-const objeto = {
-  nombre: "gerrard",
-  edad: 15,
-  grupo: { persona1: "gerrard", persona2: "dariem", persona3: "mi tio" },
-};
-objeto.grupo.persona1;
-function App() {
-  const [characters, setCharacters] = useState(null);
-
-  useEffect(() => {
-    const personajes = fetch("https://rickandmortyapi.com/api/character")
-      .then((reponse) => reponse.json())
-      .then((reponse) => {
-        console.log(reponse);
-        setCharacters(reponse.results);
-      });
-  }, []);
-  return (
-    <div className="app">
-      <nav className="barra">
-        <h1 className="primero">Rick & Morty Wiki</h1>
-        <div className="Links">
-          <h2>Characters</h2>
-          <h2>Episode</h2>
-          <h2>Location</h2>
-        </div>
-      </nav>
-      <h1 className="Characters">Characters</h1>
-      <div className="Buscador">
-        <input type="text" placeholder="Buscar" className="Input" />
-        <button className="Boton">Buscar</button>
-      </div>
-      <div className="Contenedor">
-        <div className="Filter">
-          <div>Filters</div>
-          <div>Clear Filters</div>
-          <div>Box</div>
-        </div>
-        <div className="Cards">
-          {characters &&
-            characters.map((elemento, indice) => {
-              return <Personajes propiedades={characters && elemento} />;
-            })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default App;
