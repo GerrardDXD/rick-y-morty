@@ -9,6 +9,10 @@ import Status from "./components/Filtro/Status";
 
 function App() {
   const [characters, setCharacters] = useState(null);
+  const [fondo, setFondo] = useState(null);
+  const [fondo2, setFondo2] = useState(null);
+  const [fondo3, setFondo3] = useState(null);
+  const [especies, setEspecies] = useState(null);
 
   useEffect(() => {
     const personajes = fetch("https://rickandmortyapi.com/api/character")
@@ -18,10 +22,30 @@ function App() {
         setCharacters(reponse.results);
       });
   }, []);
-  const Filtro = async () => {
+  const Filtro = async (estado) => {
     const temporal = await fetch(
-      "https://rickandmortyapi.com/api/character/?name=rick&status=alive"
+      `https://rickandmortyapi.com/api/character/?name=rick&status=${estado}`
     );
+    const data = await temporal.json();
+    setCharacters(data.results);
+  };
+  const Filtro2 = async (estado) => {
+    const temporal = await fetch(
+      `https://rickandmortyapi.com/api/character/?name=rick&species=${estado}`
+    );
+    const data = await temporal.json();
+    setCharacters(data.results);
+    setFondo2(estado);
+  };
+  const Filtro3 = async (estado) => {
+    const temporal = await fetch(
+      `https://rickandmortyapi.com/api/character/?name=rick&gender=${estado}`
+    );
+    const data = await temporal.json();
+    setCharacters(data.results);
+  };
+  const originalState = async () => {
+    const temporal = await fetch("https://rickandmortyapi.com/api/character");
     const data = await temporal.json();
     setCharacters(data.results);
   };
@@ -37,14 +61,15 @@ function App() {
       </nav>
       <h1 className="Characters">Characters</h1>
       <div className="Buscador">
-        <input type="text" placeholder="Buscar" className="Input" />
+        <input type="text" placeholder="Buscar personajes" className="Input" />
         <button className="Boton">Buscar</button>
       </div>
       <div className="Contenedor">
         <div className="Filter">
-          <Status status={Filtro} />
-          <Species />
-          <Gender />
+          <button onClick={() => originalState()}>Clear Filters</button>
+          <Status status={Filtro} fondo={fondo} />
+          <Species status={Filtro2} fondo={fondo2} />
+          <Gender status={Filtro3} fondo={fondo3} />
         </div>
         <div className="Cards">
           {characters &&

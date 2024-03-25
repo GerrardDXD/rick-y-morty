@@ -2,4 +2,9 @@
   border: 1px solid black;
   width: 300px;
   margin-bottom: 10px;
+  border-radius: 15px;
+  border-color: blue;
+}
+.image {
+  border-radius: 15px;
 }
