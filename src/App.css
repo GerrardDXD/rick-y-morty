@@ -62,3 +62,8 @@
   flex-wrap: wrap;
   justify-content: space-around;
 }
+.paginado {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
